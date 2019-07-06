@@ -6,8 +6,6 @@
 //  Copyright © 2019 Denis Bystruev. All rights reserved.
 //
 
-import UIKit
-import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
@@ -17,6 +15,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin]
+        
         // Set the view's delegate
         sceneView.delegate = self
         
@@ -24,7 +24,17 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         sceneView.showsStatistics = true
         
         // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        let scene = SCNScene()
+        
+        // Load Happy model
+        let happy = loadModel(named: "art.scnassets/happy.dae")!
+        happy.position = SCNVector3(-0.5, 0, -1)
+        happy.scale = SCNVector3(0.1, 0.1, 0.1)
+        scene.rootNode.addChildNode(happy)
+        
+        let ship = loadModel(named: "art.scnassets/ship.scn")!
+        ship.position = SCNVector3(0.5, 0, -1)
+        scene.rootNode.addChildNode(ship)
         
         // Set the scene to the view
         sceneView.scene = scene
@@ -45,6 +55,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Pause the view's session
         sceneView.session.pause()
+    }
+    
+    func loadModel(named modelName: String) -> SCNNode? {
+        guard let scene = SCNScene(named: modelName) else { return nil }
+        
+        let node = scene.rootNode.clone()
+        
+        return node
     }
 
     // MARK: - ARSCNViewDelegate
