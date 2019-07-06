@@ -15,6 +15,8 @@ class ViewController: UIViewController, ARSCNViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        sceneView.autoenablesDefaultLighting = true
+        
         sceneView.debugOptions = [ARSCNDebugOptions.showWorldOrigin]
         
         // Set the view's delegate
